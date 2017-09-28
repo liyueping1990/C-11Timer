@@ -6,11 +6,6 @@
 #include<atomic>
 #include<mutex>
 
-//#include<condition_variable>
-//#include<memory>
-//#include<functional>
-//#include<chrono>
-
 class Timer 
 {
 public:
@@ -37,23 +32,24 @@ private:
 	std::condition_variable expired_cond_;
 };
 
+// 同步函数定义
 template<typename callable, class ...arguments>
 inline void Timer::SyncWait(int after, callable && f, arguments && ...args)
 {
-	std::function<typename std::result_of<callable(arguments...)>::type()> task
-	(std::bind(std::forward<callable>(f), std::forward<arguments>(args)...));
+	std::function<typename std::result_of<callable(arguments...)>::type()> task(std::bind(std::forward<callable>(f), std::forward<arguments>(args)...));
+	
 	std::this_thread::sleep_for(std::chrono::milliseconds(after));
 	task();
 }
 
+// 异步函数定义
 template<typename callable, class ...arguments>
 inline void Timer::AsyncWait(int after, callable && f, arguments && ...args)
 {
 	{
-		std::function<typename std::result_of<callable(arguments...)>::type()> task
-		(std::bind(std::forward<callable>(f), std::forward<arguments>(args)...));
+		std::function<typename std::result_of<callable(arguments...)>::type()> task(std::bind(std::forward<callable>(f), std::forward<arguments>(args)...));
 
-		std::thread([after, task]()
+		std::thread([after, task]() // 启动一个新线程
 		{
 			std::this_thread::sleep_for(std::chrono::milliseconds(after));
 			task();

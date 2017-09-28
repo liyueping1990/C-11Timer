@@ -16,7 +16,7 @@ void Timer::StartTimer(int interval, std::function<void()> task)
 {
 	if (expired_ == false)
 	{
-		// std::cout << "timer is currently running, please expire it first..." << std::endl;
+		std::cout << "timer is currently running, please expire it first..." << std::endl;
 		return;
 	}
 	expired_ = false;
@@ -27,7 +27,7 @@ void Timer::StartTimer(int interval, std::function<void()> task)
 			std::this_thread::sleep_for(std::chrono::milliseconds(interval));
 			task();
 		}
-		// std::cout << "stop task..." << std::endl;
+		std::cout << "stop task..." << std::endl;
 		{
 			std::lock_guard<std::mutex> locker(mutex_);
 			expired_ = true;
@@ -55,8 +55,10 @@ void Timer::Expire()
 		expired_cond_.wait(locker, [this] {return expired_ == true; });
 		if (expired_ == true)
 		{
-			// std::cout << "timer expired!" << std::endl;
+			std::cout << "timer expired!" << std::endl;
 			try_to_expire_ = false;
 		}
 	}
 }
+
+
