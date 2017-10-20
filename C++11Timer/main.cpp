@@ -17,10 +17,10 @@ int main()
 	Timer t;
 
 	// 周期性执行定时任务
-	//t.StartTimer(1000, std::bind(EchoFunc, "hello world!")); // 启动定时器
-	//std::this_thread::sleep_for(std::chrono::seconds(4));
-	//std::cout << "try to expire timer!" << std::endl;
-	//t.Expire();	// 终止定时器
+ 	t.StartTimer(1000, std::bind(EchoFunc, "hello world!")); // 启动定时器
+ 	std::this_thread::sleep_for(std::chrono::seconds(4));
+ 	std::cout << "try to expire timer!" << std::endl;
+	t.Expire();	// 终止定时器
 
 	std::this_thread::sleep_for(std::chrono::seconds(2));
 

@@ -36,7 +36,8 @@ private:
 template<typename callable, class ...arguments>
 inline void Timer::SyncWait(int after, callable && f, arguments && ...args)
 {
-	std::function<typename std::result_of<callable(arguments...)>::type()> task(std::bind(std::forward<callable>(f), std::forward<arguments>(args)...));
+	std::function<typename std::result_of<callable(arguments...)>::type()> 
+		task(std::bind(std::forward<callable>(f), std::forward<arguments>(args)...));
 	
 	std::this_thread::sleep_for(std::chrono::milliseconds(after));
 	task();
@@ -47,7 +48,8 @@ template<typename callable, class ...arguments>
 inline void Timer::AsyncWait(int after, callable && f, arguments && ...args)
 {
 	{
-		std::function<typename std::result_of<callable(arguments...)>::type()> task(std::bind(std::forward<callable>(f), std::forward<arguments>(args)...));
+		std::function<typename std::result_of<callable(arguments...)>::type()>
+			task(std::bind(std::forward<callable>(f), std::forward<arguments>(args)...));
 
 		std::thread([after, task]() // 启动一个新线程
 		{
